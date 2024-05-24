@@ -1,28 +1,18 @@
 package com.acm.casemanagement.steps;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import com.acm.casemanagement.dto.LoginDto;
 import com.acm.casemanagement.dto.UserDto;
-import cucumber.api.java.en.And;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
-
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.*;
-import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserLoginSteps {

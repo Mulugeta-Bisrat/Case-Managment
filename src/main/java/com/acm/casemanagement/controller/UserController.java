@@ -87,7 +87,7 @@ public class UserController {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
             userService.deleteUserById(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); //response code 204
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

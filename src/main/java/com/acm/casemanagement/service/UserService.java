@@ -52,12 +52,22 @@ public class UserService {
     }
 
 
+    public Optional<User> getUserById(Long id) {
+         return userRepository.findById(id);
+    }
 
 
+    public List<User> getAllUsers() {
+     return   userRepository.findAll();
+    }
 
+    public void deleteUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserException.UserNotFoundException("User not found with id: " + id));
+        user.setActive(false);  // Mark user as inactive
+        userRepository.save(user);  // Save the updated user back to the repository
+    }
+    }
 
-
-
-}
 
 

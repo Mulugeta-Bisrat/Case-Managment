@@ -1,5 +1,4 @@
 package com.acm.casemanagement.steps;
-
 import com.acm.casemanagement.entity.User;
 import com.acm.casemanagement.exception.UserException;
 import com.acm.casemanagement.repository.UserRepository;
@@ -22,6 +21,7 @@ public class DeleteUserByIdSteps {
 
     private Throwable exception;
 
+    //Senario Successfully delete an existing user by ID
     @Given("a user exists with ID {long} and is active")
     public void aUserExistsWithIdAndIsActive(Long id) {
         User user = User.builder()
@@ -29,21 +29,6 @@ public class DeleteUserByIdSteps {
                 .username("Test User")
                 .email("test@example.com")
                 .isActive(true)
-                .firstname("Firstname")
-                .lastname("Lastname")
-                .password("123456")
-                .build();
-
-        userRepository.save(user);
-    }
-
-    @Given("a user exists with ID {long} and is inactive")
-    public void aUserExistsWithIdAndIsInactive(Long id) {
-        User user = User.builder()
-                .id(id)
-                .username("Inactive User")
-                .email("inactive@example.com")
-                .isActive(false)
                 .firstname("Firstname")
                 .lastname("Lastname")
                 .password("123456")
@@ -68,18 +53,19 @@ public class DeleteUserByIdSteps {
         assertFalse(user.isActive());
     }
 
+    @When("I attempt to delete a non-existing user with ID {long}")
+    public void iAttemptToDeleteANonExistingUserWithId(Long id) {
+        try {
+            userService.deleteUserById(id);
+        } catch (Throwable e) {
+            exception = e;
+        }
+    }
+
     @Then("I should receive a {string} error")
     public void iShouldReceiveAnError(String errorMessage) {
         assertNotNull(exception);
         assertTrue(exception instanceof UserException.UserNotFoundException);
         assertEquals(errorMessage, exception.getMessage());
     }
-
-//    @Then("I should receive an already inactive user error with message {string}")
-//    public void iShouldReceiveAnAlreadyInactiveUserErrorWithMessage(String errorMessage) {
-//        assertNotNull(exception);
-//        assertTrue(exception instanceof UserException.UserAlreadyInactiveException);
-//        assertEquals(errorMessage, exception.getMessage());
-//    }
 }
-

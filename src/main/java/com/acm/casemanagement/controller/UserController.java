@@ -87,18 +87,12 @@ public class UserController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-            // inf log before deleteing
+        // inf log before deleting
         log.info("Received request to delete user with id: {}", id);
-        try {
-            userService.deleteUserById(id);
-            //info after deleting successfully
-            log.info("User with id: {} deactivated successfully.", id);
-            return ResponseEntity.noContent().build(); // response code 204
-        } catch (UserException.UserNotFoundException e) {
-            // Warning user not found:
-            log.error("An error occurred while deleting user with id: {}", id, e);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // response code 404
-        }
+        userService.deleteUserById(id);
+        // info after deleting successfully
+        log.info("User with id: {} deactivated successfully.", id);
+        return ResponseEntity.noContent().build(); // response code 204
     }
 
     @Operation(summary = "Login a user")

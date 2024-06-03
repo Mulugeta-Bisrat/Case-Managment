@@ -108,16 +108,15 @@ public class UserController {
     }
     @Operation(summary = "UPDATE a user by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User Updated"),
+            @ApiResponse(responseCode = "204", description = "User Updated",
+            content = {@Content(mediaType = "application/json",
+            schema = @Schema(implementation = User.class))}),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
     })
     @PutMapping("/updateUser/{id}")
-    public ResponseEntity<UserDto> upDateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
-        User user = userService.upDateUserById(id,userDto);
-        UserDto userDto1=UserDto.builder().firstname(user.getFirstname())
-                .lastname(user.getLastname()).email(user.getEmail()).username(user.getUsername())
-                .password(user.getPassword()).build();
-        return new ResponseEntity<>( userDto1, HttpStatus.OK);
+    public User updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+
+        return userService.updateUserById(id,userDto);
 
     }
 }

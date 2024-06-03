@@ -7,4 +7,6 @@ CREATE TABLE USERS (
     email VARCHAR(100) NOT NULL
 );
 
+INSERT INTO USERS (id,firstname, lastname,username,password, email )
+VALUES (2,'biniam','okbe','gentette','trtrtrt','yyyy@gmail.com');
 

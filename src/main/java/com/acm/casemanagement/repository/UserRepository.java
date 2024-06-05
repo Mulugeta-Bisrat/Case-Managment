@@ -12,5 +12,12 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
-}
+    Optional<User> findByIdAndIsActiveTrue(Long id ); //just active
+
+//    default Optional<User> getUserById(Long id) {
+//        Object userRepository = null;
+//        return userRepository.findByIdAndIsActiveTrue(id);
+
+
+    }
 

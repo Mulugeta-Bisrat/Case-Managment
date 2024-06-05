@@ -38,7 +38,7 @@ public class UserRegistrationSteps {
                 .lastname(lastname)
                 .email(email)
                 .password(password)
-                .build();
+                .isActive(true).build();
     }
 
     @And("the user {string} is already registered")
@@ -46,7 +46,7 @@ public class UserRegistrationSteps {
         UserDto existingUser = UserDto.builder()
                 .username(username)
                 .password("password")
-                .build();
+                .isActive(true).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<UserDto> entity = new HttpEntity<>(existingUser, headers);

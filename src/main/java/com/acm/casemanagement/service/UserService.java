@@ -35,6 +35,7 @@ public class UserService {
                 .lastname(userDto.getLastname())
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
+                .isActive(userDto.isActive())
                 .build();
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
@@ -52,7 +53,12 @@ public class UserService {
     }
 
 
+    public User getUserById(Long id) {
+        return (userRepository.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new UserException.UserNotFoundException("User not found or is inactive with id: " + id)));
 
+
+    }
 
 
 

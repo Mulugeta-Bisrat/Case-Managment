@@ -46,7 +46,7 @@ public class UserLoginSteps {
                 .email("muller@gmail.com")
                 .username(username)
                 .password(password)
-                .build();
+                .isActive(true).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<UserDto> entity = new HttpEntity<>(userDto, headers);

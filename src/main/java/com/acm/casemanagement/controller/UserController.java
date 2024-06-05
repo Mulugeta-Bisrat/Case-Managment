@@ -32,17 +32,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "Get all users")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found the users",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)) }),
-            @ApiResponse(responseCode = "404", description = "Users not found", content = @Content)
-    })
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
+//    @Operation(summary = "Get all users")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Found the users",
+//                    content = { @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = User.class)) }),
+//            @ApiResponse(responseCode = "404", description = "Users not found", content = @Content)
+//    })
+//    @GetMapping
+//    public List<User> getAllUsers() {
+//        return userService.getAllUsers();
+//    }
 
     @Operation(summary = "Get user by ID")
     @ApiResponses(value = {
@@ -53,8 +53,9 @@ public class UserController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+        User user = userService.getUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
     }
 
     @Operation(summary = "Register a new user")
@@ -77,21 +78,21 @@ public class UserController {
         return new ResponseEntity<>(createdUser, headers, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Delete a user by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User deleted"),
-            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isPresent()) {
-            userService.deleteUserById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
+//    @Operation(summary = "Delete a user by ID")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "204", description = "User deleted"),
+//            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+//    })
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+//        Optional<User> user = userService.getUserById(id);
+//        if (user.isPresent()) {
+//            userService.deleteUserById(id);
+//            return ResponseEntity.noContent().build();
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//    }
 
     @Operation(summary = "Login a user")
     @ApiResponses(value = {

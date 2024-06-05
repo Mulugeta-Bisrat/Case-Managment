@@ -22,5 +22,7 @@ public class User {
     private String email;
     private String username;
     private String password;
+   @Column(name = "is_active")  //???
+    private boolean isActive;
 }
 

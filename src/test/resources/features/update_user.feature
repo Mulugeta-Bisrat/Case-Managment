@@ -1,6 +1,6 @@
 Feature: Update a user
   Scenario: Successfully update an existing user
-    Given a user exists with the ID 1L
+    Given a user exists with the user update details are: firstName "firstName", lastName "lastName", email "email", username "username", and password "password"
     And the user update details are:
       | field     | value            |
       | firstName | John             |

@@ -27,54 +27,51 @@ public class UpdateUserStepDefinitions {
   //  private final String baseUrl = "http://localhost:8080/api/users";
 
 
-
-    @Given("a user exists with the ID {long} and the user update details are: firstName {string}, lastName {string}, email {string}, username {string}, and password {string}")
-    public void aUserExistsWithTheIdAndTheUserUpdateDetailsAre(long id, String firstName, String lastName, String email, String username, String password) {
+    @Given("a user exists with the user update details are: firstName {string}, lastName {string}, email {string}, username {string}, and password {string}")
+    public void aUserExistsWithTheIdAndTheUserUpdateDetailsAre( String firstName, String lastName, String email, String username, String password) {
        user = User.builder()
-                .id(id)
-                .username("Test User")
-                .email("test@example.com")
+                .username(username)
+                .email(email)
                 .isActive(true)
-                .firstname("Firstname")
-                .lastname("Lastname")
-                .password("123456")
+                .firstname(firstName)
+                .lastname(lastName)
+                .password(password)
                 .build();
-
         userRepository.save(user);
     }
 
     @And("the user update details are:")
     public void the_user_update_details_are(Map<String, String> userDetails) {
-        userDto =UserDto.builder().firstname(userDetails.get("firstName")).
-       lastname(userDetails.get("lastName")).email(userDetails.get("email"))
+        userDto = UserDto.builder()
+                .firstname(userDetails.get("firstName"))
+                .lastname(userDetails.get("lastName"))
+                .email(userDetails.get("email"))
                 .isActive(true)
                 .username(userDetails.get("username"))
-                .password(userDetails.get("password")).build();
+                .password(userDetails.get("password"))
+                .build();
     }
 
     @When("a request is made to PUT \\/updateUser\\/{int} with updated details")
-    public void a_request_is_made_to_PUT_users_with_updated_details(long  id, Map<String, String> userDetails) {
-        userDto =UserDto.builder().firstname(userDetails.get("firstName")).
-                lastname(userDetails.get("lastName")).email(userDetails.get("email"))
+    public void a_request_is_made_to_PUT_users_with_updated_details(long  id) {
+        userDto = UserDto.builder()
+                .firstname("firstName").
+                lastname("lastName")
+                .email("email")
                 .isActive(true)
-                .username(userDetails.get("username"))
-                .password(userDetails.get("password")).build();
-
-        User updatedUser = userService.updateUserById(id, userDto);
+                .username("username")
+                .password("password")
+                .build();
+        updateUser = userService.updateUserById(id, userDto);
 
 
     }
 
-//    @Then("The response status should be {int} OK")
-//    public void the_response_status_should_be_OK(Integer status) {
-//        Assert.assertEquals(userDto,updateUser);
-//    }
-
-    @Then("The user's details should be updated in the system")
+    @Then("the user's details should be updated in the system")
     public void the_users_details_should_be_updated_in_the_system() {
-Assert.assertEquals(updateUser, user);
-Assert.assertEquals(updateUser.getId(),user.getId());
-Assert.assertEquals(updateUser.getFirstname(),userDto.getFirstname());
+       Assert.assertEquals(updateUser, user);
+       Assert.assertEquals(updateUser.getId(),user.getId());
+       Assert.assertEquals(updateUser.getFirstname(),userDto.getFirstname());
 
     }
 }

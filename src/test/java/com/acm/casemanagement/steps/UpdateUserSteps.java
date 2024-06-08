@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
-public class UpdateUserStepDefinitions {
+public class UpdateUserSteps {
 
     @Autowired
     UserService userService;
@@ -53,7 +53,7 @@ public class UpdateUserStepDefinitions {
     }
 
     @When("a request is made to PUT \\/updateUser\\/{int} with updated details")
-    public void a_request_is_made_to_PUT_users_with_updated_details(long  id) {
+    public void a_request_is_made_to_PUT_users_with_updated_details(long id) {
         userDto = UserDto.builder()
                 .firstname("firstName").
                 lastname("lastName")

@@ -5,7 +5,7 @@ CREATE TABLE USERS (
     username VARCHAR(50) NOT NULL,
     password VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-   is_active BOOLEAN NOT NULL DEFAULT TRUE
+    isActive boolean(100) NOT NULL
 );
 
 

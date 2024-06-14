@@ -1,9 +1,8 @@
 package com.acm.casemanagement.controller;
-
-
 import com.acm.casemanagement.dto.LoginDto;
 import com.acm.casemanagement.dto.UserDto;
 import com.acm.casemanagement.entity.User;
+import com.acm.casemanagement.exception.UserException;
 import com.acm.casemanagement.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,20 +10,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
+
+
 
 @Slf4j
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
     @Autowired
@@ -43,6 +45,7 @@ public class UserController {
 //    public List<User> getAllUsers() {
 //        return userService.getAllUsers();
 //    }
+
 
     @Operation(summary = "Get user by ID")
     @ApiResponses(value = {
@@ -78,21 +81,22 @@ public class UserController {
         return new ResponseEntity<>(createdUser, headers, HttpStatus.CREATED);
     }
 
-//    @Operation(summary = "Delete a user by ID")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "204", description = "User deleted"),
-//            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
-//    })
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-//        Optional<User> user = userService.getUserById(id);
-//        if (user.isPresent()) {
-//            userService.deleteUserById(id);
-//            return ResponseEntity.noContent().build();
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
+
+    @Operation(summary = "Delete a user by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted"),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        // inf log before deleting
+        log.info("Received request to delete user with id: {}", id);
+        userService.deleteUserById(id);
+        // info after deleting successfully
+        log.info("User with id: {} deactivated successfully.", id);
+        return ResponseEntity.noContent().build(); // response code 204
+    }
+
 
     @Operation(summary = "Login a user")
     @ApiResponses(value = {
@@ -107,6 +111,19 @@ public class UserController {
         log.info("Logging in user: {}", loginDto.getUsername());
         User authenticatedUser = userService.loginUser(loginDto);
         return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
+    }
+    @Operation(summary = "UPDATE a user by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User Updated",
+            content = {@Content(mediaType = "application/json",
+            schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
+    @PutMapping("/updateUser/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+
+        return userService.updateUserById(id,userDto);
+
     }
 }
 

@@ -32,6 +32,7 @@ public class UserService {
                 .lastname(userDto.getLastname())
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
+                .isActive(userDto.isActive())
                 .build();
 //        user.setUsername(userDto.getUsername());
 //        user.setPassword(userDto.getPassword());
@@ -60,9 +61,10 @@ public class UserService {
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public User getUserById(long id, UserDto userDto) {
+    public User getUserById(Long id) {
+        return (userRepository.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new UserException.UserNotFoundException("User not found or is inactive with id: " + id)));
 
-        return userRepository.findById(id).orElseThrow(() -> new UserException.ResourceNotFoundException("NOT FOUND"));
     }
 
 

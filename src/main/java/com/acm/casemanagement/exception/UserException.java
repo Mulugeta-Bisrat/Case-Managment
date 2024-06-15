@@ -24,6 +24,12 @@ public class UserException extends RuntimeException {
         }
     }
 
+    public static class UserNotFoundException extends UserException{
+        public UserNotFoundException(String message) {
+            super("message");
+        }
+    }
+
     // You can add more exceptions as needed
       //to handle usernot found exception
     public static class UserNotFoundException extends UserException {

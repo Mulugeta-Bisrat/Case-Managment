@@ -46,18 +46,20 @@ public class UserController {
 //        return userService.getAllUsers();
 //    }
 
-//    @Operation(summary = "Get user by ID")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Found the user",
-//                    content = { @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = User.class)) }),
-//            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
-//    })
-//    @GetMapping("/{id}")
-//    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-//        Optional<User> user = userService.getUserById(id);
-//        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
-//    }
+
+    @Operation(summary = "Get user by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the user",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)) }),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
+    }
 
     @Operation(summary = "Register a new user")
     @ApiResponses(value = {
@@ -94,6 +96,7 @@ public class UserController {
         log.info("User with id: {} deactivated successfully.", id);
         return ResponseEntity.noContent().build(); // response code 204
     }
+
 
     @Operation(summary = "Login a user")
     @ApiResponses(value = {

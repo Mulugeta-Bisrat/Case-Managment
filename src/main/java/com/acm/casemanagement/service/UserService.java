@@ -1,6 +1,7 @@
 package com.acm.casemanagement.service;
 
 import com.acm.casemanagement.dto.LoginDto;
+import com.acm.casemanagement.dto.ResetPasswordDto;
 import com.acm.casemanagement.dto.UserDto;
 import com.acm.casemanagement.entity.User;
 import com.acm.casemanagement.exception.UserException;
@@ -66,6 +67,19 @@ public class UserService {
                 .orElseThrow(() -> new UserException.UserNotFoundException("User not found with id: " + id));
         user.setActive(false);  // Mark user as inactive
         userRepository.save(user);  // Save the updated user back to the repository
+    }
+    public void resetPassword(ResetPasswordDto resetPasswordDto) {
+        User user = userRepository.findByUsername(resetPasswordDto.getUsername())
+                .orElseThrow(() -> new UserException.UserNotFoundException("Invalid username"));
+
+        if (!user.getPassword().equals(resetPasswordDto.getOldPassword())) {
+            throw new UserException.InvalidCredentialsException("Invalid current password");
+        }
+
+        user.setPassword(resetPasswordDto.getNewPassword());
+        userRepository.save(user);
+        log.info("Password reset successfully for user: {}", resetPasswordDto.getUsername());
+
     }
     }
 

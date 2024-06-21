@@ -1,5 +1,6 @@
 package com.acm.casemanagement.controller;
 import com.acm.casemanagement.dto.LoginDto;
+import com.acm.casemanagement.dto.ResetPasswordDto;
 import com.acm.casemanagement.dto.UserDto;
 import com.acm.casemanagement.entity.User;
 import com.acm.casemanagement.exception.UserException;
@@ -112,6 +113,21 @@ public class UserController {
         User authenticatedUser = userService.loginUser(loginDto);
         return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
     }
+
+    @Operation(summary = "Reset user password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password reset successful",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid current password", content = @Content)
+    })
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+        log.info("Resetting password for user: {}", resetPasswordDto.getUsername());
+        userService.resetPassword(resetPasswordDto);
+        return ResponseEntity.ok().build();
+
     @Operation(summary = "UPDATE a user by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User Updated",
@@ -123,6 +139,7 @@ public class UserController {
     public User updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
 
         return userService.updateUserById(id,userDto);
+
 
     }
 }

@@ -33,6 +33,7 @@ public class CommonSteps {
         Map<String, Object> responseBody = parseResponse(response.getBody());
         assertNotNull(responseBody.get("id"));
         assertNotNull(responseBody.get("username"));
+
     }
 
     @And("the response should contain an error message {string}")

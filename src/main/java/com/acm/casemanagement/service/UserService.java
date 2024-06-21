@@ -6,22 +6,19 @@ import com.acm.casemanagement.dto.UserDto;
 import com.acm.casemanagement.entity.User;
 import com.acm.casemanagement.exception.UserException;
 import com.acm.casemanagement.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
 @Slf4j
 public class UserService {
-
-    private final UserRepository userRepository;
     @Autowired
-    public UserService(UserRepository userRepository) {
+    private  UserRepository userRepository;
+
+
+    public UserService() {
         this.userRepository = userRepository;
     }
 
@@ -36,9 +33,10 @@ public class UserService {
                 .lastname(userDto.getLastname())
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
+                .isActive(userDto.isActive())
                 .build();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
+//        user.setUsername(userDto.getUsername());
+//        user.setPassword(userDto.getPassword());
         log.info("User registered successfully: {}", userDto.getUsername());
         return userRepository.save(user);
     }
@@ -52,9 +50,22 @@ public class UserService {
         return user;
     }
 
+    public User updateUserById(Long id, UserDto userDto) {
+        return userRepository.findById(id).map(existingUser -> {
+            existingUser.setEmail(userDto.getEmail());
+            existingUser.setFirstname(userDto.getFirstname());
+            existingUser.setLastname(userDto.getLastname());
+            existingUser.setPassword(userDto.getPassword());
+            existingUser.setUsername(userDto.getUsername());
+            // Add more fields as needed
+            return userRepository.save(existingUser);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
-    public Optional<User> getUserById(Long id) {
-         return userRepository.findById(id);
+    public User getUserById(Long id) {
+        return (userRepository.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new UserException.UserNotFoundException("User not found or is inactive with id: " + id)));
+
     }
 
 
@@ -68,6 +79,7 @@ public class UserService {
         user.setActive(false);  // Mark user as inactive
         userRepository.save(user);  // Save the updated user back to the repository
     }
+
     public void resetPassword(ResetPasswordDto resetPasswordDto) {
         User user = userRepository.findByUsername(resetPasswordDto.getUsername())
                 .orElseThrow(() -> new UserException.UserNotFoundException("Invalid username"));
@@ -82,6 +94,5 @@ public class UserService {
 
     }
     }
-
-
+}
 

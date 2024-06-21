@@ -1,17 +1,16 @@
 package com.acm.casemanagement.steps;
 
 
-
 import com.acm.casemanagement.dto.UserDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +37,7 @@ public class UserRegistrationSteps {
                 .lastname(lastname)
                 .email(email)
                 .password(password)
-                .build();
+                .isActive(true).build();
     }
 
     @And("the user {string} is already registered")
@@ -46,7 +45,7 @@ public class UserRegistrationSteps {
         UserDto existingUser = UserDto.builder()
                 .username(username)
                 .password("password")
-                .build();
+                .isActive(true).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<UserDto> entity = new HttpEntity<>(existingUser, headers);

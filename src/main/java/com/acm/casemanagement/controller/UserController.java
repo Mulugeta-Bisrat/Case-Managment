@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
-
+import java.util.List;
 
 
 @Slf4j
@@ -30,17 +30,17 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @Operation(summary = "Get all users")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Found the users",
-//                    content = { @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = User.class)) }),
-//            @ApiResponse(responseCode = "404", description = "Users not found", content = @Content)
-//    })
-//    @GetMapping
-//    public List<User> getAllUsers() {
-//        return userService.getAllUsers();
-//    }
+    @Operation(summary = "Get all users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the users",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)) }),
+            @ApiResponse(responseCode = "404", description = "Users not found", content = @Content)
+    })
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
 
 
     @Operation(summary = "Get user by ID")

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -70,7 +71,13 @@ public class UserService {
 
 
     public List<User> getAllUsers() {
-     return   userRepository.findAll();
+        List<User> allActiveUsers = new ArrayList<>();
+        for(User user : userRepository.findAll()){
+            if(user.isActive()){
+                allActiveUsers.add(user);
+            }
+         }
+     return  allActiveUsers;
     }
 
     public User deleteUserById(Long id) {

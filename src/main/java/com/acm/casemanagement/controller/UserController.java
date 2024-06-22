@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,8 +24,6 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
     @Autowired
@@ -127,7 +123,7 @@ public class UserController {
         log.info("Resetting password for user: {}", resetPasswordDto.getUsername());
         userService.resetPassword(resetPasswordDto);
         return ResponseEntity.ok().build();
-
+    }
     @Operation(summary = "UPDATE a user by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User Updated",
@@ -139,7 +135,6 @@ public class UserController {
     public User updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
 
         return userService.updateUserById(id,userDto);
-
 
     }
 }

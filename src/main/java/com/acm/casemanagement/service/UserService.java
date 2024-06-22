@@ -10,15 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @Slf4j
 public class UserService {
+
+    private UserRepository userRepository ;
+
     @Autowired
-    private  UserRepository userRepository;
-
-
-    public UserService() {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -65,7 +67,6 @@ public class UserService {
     public User getUserById(Long id) {
         return (userRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new UserException.UserNotFoundException("User not found or is inactive with id: " + id)));
-
     }
 
 
@@ -90,9 +91,9 @@ public class UserService {
 
         user.setPassword(resetPasswordDto.getNewPassword());
         userRepository.save(user);
-        log.info("Password reset successfully for user: {}", resetPasswordDto.getUsername());
+        log.info("Successfully reset password for user: {}", resetPasswordDto.getUsername());
 
     }
-    }
+
 }
 

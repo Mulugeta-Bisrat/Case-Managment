@@ -3,7 +3,6 @@ import com.acm.casemanagement.dto.LoginDto;
 import com.acm.casemanagement.dto.ResetPasswordDto;
 import com.acm.casemanagement.dto.UserDto;
 import com.acm.casemanagement.entity.User;
-import com.acm.casemanagement.exception.UserException;
 import com.acm.casemanagement.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -81,17 +80,17 @@ public class UserController {
 
     @Operation(summary = "Delete a user by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User deleted"),
+            @ApiResponse(responseCode = "204", description = "User deleted", content = @Content),
             @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable Long id) {
         // inf log before deleting
         log.info("Received request to delete user with id: {}", id);
-        userService.deleteUserById(id);
+        User deletedUser = userService.deleteUserById(id);
         // info after deleting successfully
         log.info("User with id: {} deactivated successfully.", id);
-        return ResponseEntity.noContent().build(); // response code 204
+        return new ResponseEntity<>(deletedUser, HttpStatus.NO_CONTENT);
     }
 
 
@@ -133,8 +132,10 @@ public class UserController {
     })
     @PutMapping("/updateUser/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
-
-        return userService.updateUserById(id,userDto);
+        log.info("updating a user started!");
+        User aUser = userService.updateUserById(id,userDto);
+        log.info("updating a user completed!");
+        return aUser;
 
     }
 }

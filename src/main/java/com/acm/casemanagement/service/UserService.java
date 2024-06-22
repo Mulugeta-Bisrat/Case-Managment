@@ -37,10 +37,9 @@ public class UserService {
                 .password(userDto.getPassword())
                 .isActive(userDto.isActive())
                 .build();
-//        user.setUsername(userDto.getUsername());
-//        user.setPassword(userDto.getPassword());
-        log.info("User registered successfully: {}", userDto.getUsername());
-        return userRepository.save(user);
+        User registeredUser = userRepository.save(user);
+        log.info("User registered successfully: {}", registeredUser.getUsername());
+        return registeredUser;
     }
 
     public User loginUser(LoginDto loginDto) {
@@ -61,7 +60,7 @@ public class UserService {
             existingUser.setUsername(userDto.getUsername());
             // Add more fields as needed
             return userRepository.save(existingUser);
-        }).orElseThrow(() -> new RuntimeException("User not found"));
+        }).orElseThrow(() -> new UserException.UserNotFoundException("User not found"));
     }
 
     public User getUserById(Long id) {
@@ -74,11 +73,14 @@ public class UserService {
      return   userRepository.findAll();
     }
 
-    public void deleteUserById(Long id) {
+    public User deleteUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserException.UserNotFoundException("User not found with id: " + id));
+        if(!user.isActive()){
+           throw new UserException.UserNotFoundException("User already deleted with id: " + id);
+        }
         user.setActive(false);  // Mark user as inactive
-        userRepository.save(user);  // Save the updated user back to the repository
+        return userRepository.save(user);  // Save the updated user back to the repository
     }
 
     public void resetPassword(ResetPasswordDto resetPasswordDto) {

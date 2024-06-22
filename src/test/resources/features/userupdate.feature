@@ -11,3 +11,5 @@ Feature: Update a user
     When a request is made to PUT /updateUser/1 with updated details
    # Then the response status should be 200 OK
     And the user's details should be updated in the system
+
+  Scenario: User does not exist in the system

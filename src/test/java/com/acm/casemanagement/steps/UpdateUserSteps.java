@@ -24,8 +24,6 @@ public class UpdateUserSteps {
    User user,updateUser;
    UserDto userDto;
 
-  //  private final String baseUrl = "http://localhost:8080/api/users";
-
 
     @Given("a user exists with the user update details are: firstName {string}, lastName {string}, email {string}, username {string}, and password {string}")
     public void aUserExistsWithTheIdAndTheUserUpdateDetailsAre( String firstName, String lastName, String email, String username, String password) {
@@ -63,8 +61,6 @@ public class UpdateUserSteps {
                 .password("password")
                 .build();
         updateUser = userService.updateUserById(id, userDto);
-
-
     }
 
     @Then("the user's details should be updated in the system")

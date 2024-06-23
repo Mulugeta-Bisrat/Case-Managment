@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,18 +32,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "Get all users")
+    @Operation(summary = "Get all active users", description = "Returns a paginated list of active users only")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the users",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)) }),
-            @ApiResponse(responseCode = "404", description = "Users not found", content = @Content)
+                            schema = @Schema(implementation = User.class)) })
     })
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers(Pageable pageable) {
+        Page<User> usersPage = userService.getActiveUsers(pageable);
+        List<User> users = usersPage.getContent();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
 
     @Operation(summary = "Get user by ID")
     @ApiResponses(value = {

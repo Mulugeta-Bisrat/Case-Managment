@@ -4,7 +4,6 @@ import com.acm.casemanagement.dto.LoginDto;
 import com.acm.casemanagement.dto.ResetPasswordDto;
 import com.acm.casemanagement.dto.UserDto;
 import com.acm.casemanagement.entity.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,8 +24,6 @@ public class PasswordResetSteps {
     @Autowired
     private CommonSteps commonSteps;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private final String baseUrl = "http://localhost:8080/api/users";
     private ResponseEntity<String> response;
@@ -40,6 +37,7 @@ public class PasswordResetSteps {
                 .firstname("John")
                 .lastname("Doe")
                 .email("john.doe@example.com")
+                .isActive(true)
                 .build();
 
         HttpHeaders headers = new HttpHeaders();

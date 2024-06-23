@@ -21,8 +21,8 @@ public class UpdateUserSteps {
     @Autowired
     UserRepository userRepository;
 
-   User user,updateUser;
-   UserDto userDto;
+    User user,updateUser, registeredUser;
+    UserDto userDto;
 
 
     @Given("a user exists with the user update details are: firstName {string}, lastName {string}, email {string}, username {string}, and password {string}")
@@ -35,7 +35,7 @@ public class UpdateUserSteps {
                 .lastname(lastName)
                 .password(password)
                 .build();
-        userRepository.save(user);
+        registeredUser = userRepository.save(user);
     }
 
     @And("the user update details are:")
@@ -50,24 +50,14 @@ public class UpdateUserSteps {
                 .build();
     }
 
-    @When("a request is made to PUT \\/updateUser\\/{int} with updated details")
-    public void a_request_is_made_to_PUT_users_with_updated_details(long id) {
-        userDto = UserDto.builder()
-                .firstname("firstName").
-                lastname("lastName")
-                .email("email")
-                .isActive(true)
-                .username("username")
-                .password("password")
-                .build();
-        updateUser = userService.updateUserById(id, userDto);
+    @When("a request is made to PUT \\/updateUser with updated details")
+    public void a_request_is_made_to_PUT_users_with_updated_details() {
+        updateUser = userService.updateUserById(registeredUser.getId(), userDto);
     }
 
     @Then("the user's details should be updated in the system")
     public void the_users_details_should_be_updated_in_the_system() {
-       Assert.assertEquals(updateUser, user);
-       Assert.assertEquals(updateUser.getId(),user.getId());
+       Assert.assertEquals(updateUser.getId(),registeredUser.getId());
        Assert.assertEquals(updateUser.getFirstname(),userDto.getFirstname());
-
     }
 }

@@ -8,8 +8,6 @@ Feature: Update a user
       | email     | john.doe@test.com|
       | username  | johndoe          |
       | password  | securepassword   |
-    When a request is made to PUT /updateUser/1 with updated details
+    When a request is made to PUT /updateUser with updated details
    # Then the response status should be 200 OK
     And the user's details should be updated in the system
-
-  Scenario: User does not exist in the system

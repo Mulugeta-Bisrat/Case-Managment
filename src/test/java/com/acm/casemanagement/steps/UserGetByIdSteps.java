@@ -41,7 +41,7 @@ public class UserGetByIdSteps {
          responseEntity=restTemplate.postForEntity(baseUrl + "/register", entity, User.class);
     }
 
-    @When("a request is made to GET /users") //
+    @When("a request is made to GET /users by id") //
     public void aRequestIsMadeToGETUsersId() {
         String url = baseUrl + "/" + responseEntity.getBody().getId();
         aUser = restTemplate.getForObject(url, User.class);

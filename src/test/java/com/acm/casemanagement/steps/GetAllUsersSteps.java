@@ -32,6 +32,7 @@ public class GetAllUsersSteps {
                 .email("fev@gmail.com")
                 .username("Fev")
                 .password("123")
+                .isActive(true)
                 .build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -60,10 +61,6 @@ public class GetAllUsersSteps {
     @Then("the response should contain an empty list")
     public void theResponseShouldContainAnEmptyList() {
         assertNotNull(responseEntity);
-//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//        List<User> users = responseEntity.getBody();
-//        assertNotNull(users);
-//        assertTrue(users.isEmpty());
     }
 
 }
